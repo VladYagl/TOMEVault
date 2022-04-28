@@ -238,8 +238,8 @@ def plot_stats(chars):
             if key not in stats:
                 stats[key] = {'real': [], 'base': []}
             # <Stat-name> n (base m)
-            stats[key]['real'].append(int(value.split(' ')[0]))
-            stats[key]['base'].append(int(list(filter(None, re.split(' |\)|\(', value)))[-1]))
+            stats[key]['real'].append(float(value.split(' ')[0]))
+            stats[key]['base'].append(float(list(filter(None, re.split(' |\)|\(', value)))[-1]))
     for key, stat in stats.items():
         print("{:13} {:5.1f} (base {:5.1f})".format(key, np.average(stat['real']),
                                                     np.average(stat['base'])))
@@ -249,6 +249,9 @@ def plot_list(list_type, chars):
     size = []
     items = {}
     for char in chars:
+        if not char[list_type]:
+            size.append(0)
+            continue
         size.append(len(char[list_type]))
         for value in char[list_type]:
             items[value] = items.get(value, 0) + 1
@@ -258,10 +261,10 @@ def plot_list(list_type, chars):
 
 
 def main():
-    chars = VaultSoup().request({'difficulty': ['insane', 'madness'], 'class': ['brawler']},
-                                winner=True)
     # chars = VaultSoup().request({'difficulty': ['insane', 'madness'], 'class': ['brawler']},
-    #                             min_level=12, max_level=25, winner=False)
+    #                             winner=True)
+    chars = VaultSoup().request({'difficulty': ['insane', 'madness'], 'class': ['anorithil']},
+                                min_level=12, max_level=25, winner=False)
 
     print('\n\n\n\n\t------< CLASS TALENTS >------\n')
     plot_talents('class', chars)
